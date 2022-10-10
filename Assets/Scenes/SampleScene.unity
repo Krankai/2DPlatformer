@@ -768,10 +768,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layoutTilemap: {fileID: 576359052}
   replaceTile: {fileID: 11400000, guid: 06c8040598d4b9442bf0520440427980, type: 2}
-  isRevert: 1
+  isRevert: 0
+  isRepeat: 1
   stepDelay: 1.5
   cycleInterval: 3
-  fillDirection: 3
+  fillDirection: 0
 --- !u!1001 &168481129
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -12,6 +12,8 @@ public class AutoFillTileUtility : MonoBehaviour
 
     public bool isRevert = true;
 
+    public bool isRepeat = true;
+
     public float stepDelay = 1.5f;          // delay between each fill/un-fill action
 
     public float cycleInterval = 3.0f;      // interval between coonsecutive fill and un-fill action
