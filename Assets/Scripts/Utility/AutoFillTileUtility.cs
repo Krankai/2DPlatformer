@@ -24,63 +24,23 @@ public class AutoFillTileUtility : MonoBehaviour
 
     private List<Vector3Int> listFillTilePos;
 
+    private WaitForSeconds cycleWaitTimer;
+
+    private WaitForSeconds stepWaitTimer;
+
     private void Awake()
     {
         selfTilemap = GetComponent<Tilemap>();
         listFillTilePos = new List<Vector3Int>();
+
+        cycleWaitTimer = new WaitForSeconds(cycleInterval);
+        stepWaitTimer = new WaitForSeconds(stepDelay);
     }
 
     [ContextMenu("Fill tiles")]
     private void FillTiles()
     {
-        // for (int i = layoutTilemap.origin.x; i <= layoutTilemap.origin.x + layoutTilemap.size.x; ++i)
-        // {
-        //     for (int j = layoutTilemap.origin.y; j <= layoutTilemap.origin.y + layoutTilemap.size.y; ++j)
-        //     {
-        //         Vector3Int cellPosition = new Vector3Int(i, j, 0);
-
-        //         TileBase currentTile = layoutTilemap.GetTile(cellPosition);
-        //         bool toPlaceTile = (currentTile != null && currentTile.name.Equals(replaceTile.name));
-
-        //         if (toPlaceTile)
-        //         {
-        //             targetTilemap.SetTile(cellPosition, replaceTile);
-        //         }
-        //         Debug.Log($"x: {i}, y: {j}");
-        //         Debug.Log(toPlaceTile);
-        //     }
-        // }
-
-        // foreach (var pos in layoutTilemap.cellBounds.allPositionsWithin)
-        // {
-        //     Vector3Int cellPos = new Vector3Int(pos.x, pos.y, pos.z);
-        //     if (!layoutTilemap.HasTile(cellPos))
-        //     {
-        //         continue;
-        //     }
-
-        //     fillTilePos.Add(cellPos);
-        //     selfTilemap.SetTile(cellPos, replaceTile);
-        // }
-
-        // fillTilePos.Sort(CompareCellPosY);
-        // foreach (var pos in toFillTilePos)
-        // {
-        //     Debug.Log(pos);
-        // }
-
-        // Auto revert
-        // Invoke("RevertTiles", fillDuration);
-
         StartCoroutine(FillTilesCoroutine());
-    }
-
-    private void RevertTiles()
-    {
-        foreach (var pos in listFillTilePos)
-        {
-            selfTilemap.SetTile(pos, null);
-        }
     }
 
     private void UpdateFillTilePosList()
@@ -134,41 +94,50 @@ public class AutoFillTileUtility : MonoBehaviour
 
         bool isVertical = (fillDirection == Direction.Up || fillDirection == Direction.Down);
 
-        // Fill
-        float prevPosValue = isVertical ? listFillTilePos[0].y : listFillTilePos[0].x;
-        for (int i = 0; i < listFillTilePos.Count; ++i)
+        do
         {
-            Vector3Int currentPos = listFillTilePos[i];
-            float currentPosValue = isVertical ? currentPos.y : currentPos.x;
-
-            if (currentPosValue != prevPosValue)
-            {
-                yield return new WaitForSeconds(stepDelay);
-                prevPosValue = currentPosValue;
-            }
-
-            selfTilemap.SetTile(currentPos, replaceTile);
-        }
-
-        // Un-fill (= revert back to normal)
-        if (isRevert)
-        {
-            yield return new WaitForSeconds(cycleInterval);
-
-            for (int i = listFillTilePos.Count - 1; i >= 0; --i)
+            // Fill
+            float prevPosValue = isVertical ? listFillTilePos[0].y : listFillTilePos[0].x;
+            for (int i = 0; i < listFillTilePos.Count; ++i)
             {
                 Vector3Int currentPos = listFillTilePos[i];
                 float currentPosValue = isVertical ? currentPos.y : currentPos.x;
 
                 if (currentPosValue != prevPosValue)
                 {
-                    yield return new WaitForSeconds(stepDelay);
+                    yield return stepWaitTimer;
                     prevPosValue = currentPosValue;
                 }
 
-                selfTilemap.SetTile(currentPos, null);
+                if (!selfTilemap.HasTile(currentPos))
+                {
+                    selfTilemap.SetTile(currentPos, replaceTile);
+                }
             }
-        }
+
+            // Un-fill (= revert back to normal)
+            if (isRevert)
+            {
+                yield return cycleWaitTimer;
+
+                for (int i = listFillTilePos.Count - 1; i >= 0; --i)
+                {
+                    Vector3Int currentPos = listFillTilePos[i];
+                    float currentPosValue = isVertical ? currentPos.y : currentPos.x;
+
+                    if (currentPosValue != prevPosValue)
+                    {
+                        yield return stepWaitTimer;
+                        prevPosValue = currentPosValue;
+                    }
+
+                    selfTilemap.SetTile(currentPos, null);
+                }
+            }
+
+            yield return cycleWaitTimer;
+            
+        } while (isRepeat);
 
         ClearFillTilePosList();
     }
