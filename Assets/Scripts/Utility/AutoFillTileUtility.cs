@@ -20,6 +20,10 @@ public class AutoFillTileUtility : MonoBehaviour
 
     public Direction fillDirection = Direction.Up;
 
+    public bool isProgressing;
+
+    public bool hasRequestToStop;
+
     private Tilemap selfTilemap;
 
     private List<Vector3Int> listFillTilePos;
@@ -28,6 +32,22 @@ public class AutoFillTileUtility : MonoBehaviour
 
     private WaitForSeconds stepWaitTimer;
 
+    public void FillTiles()
+    {
+        if (isProgressing) return;
+        
+        isProgressing = true;
+        StartCoroutine(FillTilesCoroutine());
+    }
+
+    // Force stop filling (tiles) at the end of the current cycle
+    public void RequestStopFilling()
+    {
+        if (!isProgressing || hasRequestToStop) return;
+
+        hasRequestToStop = true;
+    }
+
     private void Awake()
     {
         selfTilemap = GetComponent<Tilemap>();
@@ -35,12 +55,9 @@ public class AutoFillTileUtility : MonoBehaviour
 
         cycleWaitTimer = new WaitForSeconds(cycleInterval);
         stepWaitTimer = new WaitForSeconds(stepDelay);
-    }
 
-    [ContextMenu("Fill tiles")]
-    private void FillTiles()
-    {
-        StartCoroutine(FillTilesCoroutine());
+        isProgressing = false;
+        hasRequestToStop = false;
     }
 
     private void UpdateFillTilePosList()
@@ -135,11 +152,19 @@ public class AutoFillTileUtility : MonoBehaviour
                 }
             }
 
+            if (hasRequestToStop)
+            {
+                hasRequestToStop = false;
+                break;
+            }
+
             yield return cycleWaitTimer;
             
         } while (isRepeat);
 
         ClearFillTilePosList();
+
+        isProgressing = false;
     }
 }
 
