@@ -8,7 +8,7 @@ public class FallingEnemy : EnemyBase
     private SpriteRenderer spriteRenderer = null;
 
     // The rigid body 2D associated with this enemy
-    private Rigidbody2D rigidbody2D = null;
+    private Rigidbody2D rgb2D = null;
 
     /// <summary>
     /// Description:
@@ -20,7 +20,7 @@ public class FallingEnemy : EnemyBase
     /// </summary>
     public void FreeFall()
     {
-        rigidbody2D.gravityScale = 1.0f;
+        rgb2D.gravityScale = 1.0f;
     }
 
     /// <summary>
@@ -35,6 +35,6 @@ public class FallingEnemy : EnemyBase
     {
         base.Setup();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        rigidbody2D = GetComponent<Rigidbody2D>();
+        rgb2D = GetComponent<Rigidbody2D>();
     }
 }
