@@ -21,6 +21,11 @@ public class LaserController : MonoBehaviour
     [Tooltip("Shooting duration")]
     public float shootingDuration = 3.0f;
 
+    [Tooltip("Shooting delay")]
+    public float shootingDelay = 0.0f;
+
+    public bool IsShooting { get; private set; }
+
     private GameObject laserStartObject;
     private GameObject laserMiddleObject;
     private GameObject laserEndObject;
@@ -34,6 +39,7 @@ public class LaserController : MonoBehaviour
     private float laserDamageAreaRatio = 0.6f;
 
     private WaitForSeconds shootDurationWaitTimer;
+    private WaitForSeconds shootDelayWaitTimer;
     private WaitForEndOfFrame eofWaitTimer;
     private Quaternion identityRotation;
 
@@ -46,24 +52,29 @@ public class LaserController : MonoBehaviour
         laserEndSpriteRenderer = laserEndPrefab.GetComponent<SpriteRenderer>();
 
         shootDurationWaitTimer = new WaitForSeconds(shootingDuration);
+        shootDelayWaitTimer = new WaitForSeconds(shootingDelay);
         eofWaitTimer = new WaitForEndOfFrame();
         identityRotation = Quaternion.identity;
     }
 
     [ContextMenu("Shoot coroutine")]
-    private void ShootLaserWithAnimation()
+    public void ShootLaserWithAnimation()
     {
         ClearData();
+
+        IsShooting = true;
 
         // Setup laser sprites
         if (laserStartObject == null)
         {
             laserStartObject = Instantiate(laserStartPrefab, this.transform.position, laserStartPrefab.transform.rotation, this.transform);
+            laserStartObject.SetActive(false);
         }
 
         if (laserMiddleObject == null)
         {
             laserMiddleObject = Instantiate(laserMiddlePrefab, this.transform.position, laserMiddlePrefab.transform.rotation, this.transform);
+            laserMiddleObject.SetActive(false);
         }
 
         // Determine and rotate the sprites into shooting direction
@@ -85,7 +96,7 @@ public class LaserController : MonoBehaviour
         }
 
         // Raycast along the shooting direction to get the nearest collider
-        LayerMask mask = LayerMask.GetMask("Foreground");
+        LayerMask mask = LayerMask.GetMask("Foreground Raycast");
         RaycastHit2D hit = Physics2D.Raycast(this.transform.position, laserDirection, maxLaserLength, mask);
 
         float laserDistance = maxLaserLength;
@@ -97,7 +108,6 @@ public class LaserController : MonoBehaviour
             {
                 laserDistance = maxLaserLength;
             }
-            Debug.Log(laserDistance);
 
             // End section
             if (laserEndObject == null)
@@ -125,6 +135,12 @@ public class LaserController : MonoBehaviour
 
     private IEnumerator AnimateLaser(float distance, bool isHit)
     {
+        yield return shootDelayWaitTimer;
+
+        laserStartObject.SetActive(true);
+        laserMiddleObject.SetActive(true);
+
+        // Animate laser extending and retracting
         yield return LaserExtendingRoutine(distance, isHit);
         SetupDamageCollider(distance);
 
@@ -132,6 +148,8 @@ public class LaserController : MonoBehaviour
 
         yield return LaserRetractingRoutine(distance);
         ClearDamageCollider();
+
+        IsShooting = false;
     }
 
     private IEnumerator LaserExtendingRoutine(float distance, bool isHit)

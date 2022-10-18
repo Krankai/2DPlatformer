@@ -16,7 +16,7 @@ public class TriggerUtility : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag(targetTag))
+        if (targetTag != null && collision.CompareTag(targetTag))
         {
             triggerEvent.Invoke();
         }
