@@ -18,11 +18,37 @@ public class LaserController : MonoBehaviour
     [Tooltip("Direction along which the laser is shot")]
     public Direction shootDirection = Direction.Right;
 
+    [Tooltip("Shooting duration")]
+    public float shootingDuration = 3.0f;
+
     private GameObject laserStartObject;
     private GameObject laserMiddleObject;
     private GameObject laserEndObject;
 
-    private float laserEndOffset = 0.037f;
+    private SpriteRenderer laserStartSpriteRenderer;
+    private SpriteRenderer laserEndSpriteRenderer;
+
+    private BoxCollider2D boxCollider;
+
+    private float laserEndOffset = -0.165f;
+    private float laserDamageAreaRatio = 0.6f;
+
+    private WaitForSeconds shootDurationWaitTimer;
+    private WaitForEndOfFrame eofWaitTimer;
+    private Quaternion identityRotation;
+
+    private void Start()
+    {
+        boxCollider = GetComponent<BoxCollider2D>();
+        boxCollider.enabled = false;
+
+        laserStartSpriteRenderer = laserStartPrefab.GetComponent<SpriteRenderer>();
+        laserEndSpriteRenderer = laserEndPrefab.GetComponent<SpriteRenderer>();
+
+        shootDurationWaitTimer = new WaitForSeconds(shootingDuration);
+        eofWaitTimer = new WaitForEndOfFrame();
+        identityRotation = Quaternion.identity;
+    }
 
     [ContextMenu("Shoot coroutine")]
     private void ShootLaserWithAnimation()
@@ -71,6 +97,7 @@ public class LaserController : MonoBehaviour
             {
                 laserDistance = maxLaserLength;
             }
+            Debug.Log(laserDistance);
 
             // End section
             if (laserEndObject == null)
@@ -93,20 +120,25 @@ public class LaserController : MonoBehaviour
         this.transform.Rotate(this.transform.forward, angle);
 
         // Animate laser shooting and retracting process
-        StartCoroutine(AnimateLaser(laserDistance, 3.0f, laserEndObject != null));
+        StartCoroutine(AnimateLaser(laserDistance, laserEndObject != null));
     }
 
-    private IEnumerator AnimateLaser(float distance, float duration, bool isHit)
+    private IEnumerator AnimateLaser(float distance, bool isHit)
     {
         yield return LaserExtendingRoutine(distance, isHit);
-        yield return new WaitForSeconds(duration);
+        SetupDamageCollider(distance);
+
+        yield return shootDurationWaitTimer;
+
         yield return LaserRetractingRoutine(distance);
+        ClearDamageCollider();
     }
 
     private IEnumerator LaserExtendingRoutine(float distance, bool isHit)
     {
         const float extendStep = 0.2f;
-        float laserStartSpriteWidth = laserStartObject.GetComponent<SpriteRenderer>().size.x;
+        float laserStartSpriteWidth = laserStartSpriteRenderer.size.x;
+        float laserEndSpriteWidth = laserEndSpriteRenderer.size.x;
 
         // Position and extend laser middle section over time
         float currentLaserLength = laserStartSpriteWidth;
@@ -116,7 +148,7 @@ public class LaserController : MonoBehaviour
                 new Vector3(currentLaserLength - laserStartSpriteWidth, laserMiddleObject.transform.localScale.y, laserMiddleObject.transform.localScale.z);
             laserMiddleObject.transform.localPosition = new Vector2(currentLaserLength / 2, 0f);
 
-            yield return new WaitForEndOfFrame();
+            yield return eofWaitTimer;
         }
         currentLaserLength = distance;
 
@@ -127,21 +159,20 @@ public class LaserController : MonoBehaviour
         if (laserEndObject != null && isHit)
         {
             laserEndObject.SetActive(true);
-            laserEndObject.transform.localPosition = new Vector2(currentLaserLength - laserEndOffset, 0f);
+            //laserEndObject.transform.localPosition = new Vector2(currentLaserLength - laserEndOffset, 0f);
+            laserEndObject.transform.localPosition = new Vector2(currentLaserLength - laserStartSpriteWidth / 2 + laserEndSpriteWidth / 2 + laserEndOffset, 0f);
         }
     }
 
     private IEnumerator LaserRetractingRoutine(float distance)
     {
-        yield return new WaitForSeconds(3);
-
         const float extendStep = 0.2f;
-        float laserStartSpriteWidth = laserStartObject.GetComponent<SpriteRenderer>().size.x;
+        float laserStartSpriteWidth = laserStartSpriteRenderer.size.x;
 
         if (laserEndObject != null)
         {
             Destroy(laserEndObject);
-            yield return new WaitForEndOfFrame();
+            yield return eofWaitTimer;
         }
 
         // Position and retract laser middle section over time
@@ -156,17 +187,30 @@ public class LaserController : MonoBehaviour
         }
         currentLaserLength = laserStartSpriteWidth;
 
-        // laserMiddleObject.transform.localScale =
-        //     new Vector3(currentLaserLength - laserStartSpriteWidth, laserMiddleObject.transform.localScale.y, laserMiddleObject.transform.localScale.z);
-        // laserMiddleObject.transform.localPosition = new Vector2(currentLaserLength / 2, 0f);
-
         Destroy(laserMiddleObject);
-        yield return new WaitForEndOfFrame();
+        yield return eofWaitTimer;
 
         Destroy(laserStartObject);
     }
 
-    [ContextMenu("Shoot")]
+    private void SetupDamageCollider(float laserDistance)
+    {
+        boxCollider.enabled = true;
+
+        float laserStartSpriteWidth = laserStartSpriteRenderer.size.x;
+        float laserStartSpriteHeight = laserStartSpriteRenderer.size.y;
+        float laserEndSpriteWidth = laserEndSpriteRenderer.size.x;
+
+        boxCollider.size = new Vector2(laserDistance, laserStartSpriteHeight * laserDamageAreaRatio);
+        boxCollider.offset = new Vector2(boxCollider.size.x / 2, 0);
+    }
+
+    private void ClearDamageCollider()
+    {
+        boxCollider.enabled = false;
+    }
+
+    // OLD - Reference only
     private void ShootLaser()
     {
         // Start section
@@ -242,13 +286,12 @@ public class LaserController : MonoBehaviour
         this.transform.Rotate(-this.transform.forward, Vector2.Angle(this.transform.right, laserDirection));
     }
 
-    // Debugging ???
     private void ClearData()
     {
         Destroy(laserStartObject);
         Destroy(laserMiddleObject);
         Destroy(laserEndObject);
 
-        this.transform.rotation = Quaternion.identity;
+        this.transform.rotation = identityRotation;
     }
 }
