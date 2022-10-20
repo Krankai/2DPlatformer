@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class FallingEnemy : EnemyBase
 {
+    [Header("References")]
+    [Tooltip("Detect when player comes into the zone")]
+    public GameObject triggerZone;
+
     // The sprite renderer associated with this enemy
     private SpriteRenderer spriteRenderer = null;
 
@@ -21,6 +25,7 @@ public class FallingEnemy : EnemyBase
     public void FreeFall()
     {
         rgb2D.gravityScale = 1.0f;
+        triggerZone.SetActive(false);
     }
 
     /// <summary>

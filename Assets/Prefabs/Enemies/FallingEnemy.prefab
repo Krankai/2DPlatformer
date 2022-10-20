@@ -402,6 +402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2
   enemyState: 2
+  triggerZone: {fileID: 5892379210258327215}
 --- !u!114 &5892379210730176077
 MonoBehaviour:
   m_ObjectHideFlags: 0
