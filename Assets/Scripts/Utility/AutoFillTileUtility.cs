@@ -20,9 +20,9 @@ public class AutoFillTileUtility : MonoBehaviour
 
     public Direction fillDirection = Direction.Up;
 
-    public bool isProgressing;
+    private bool isProgressing;
 
-    public bool hasRequestToStop;
+    private bool hasRequestToStop;
 
     private Tilemap selfTilemap;
 
