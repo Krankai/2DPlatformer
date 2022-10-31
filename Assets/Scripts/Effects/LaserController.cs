@@ -38,6 +38,8 @@ public class LaserController : MonoBehaviour
     private float laserEndOffset = -0.165f;
     private float laserDamageAreaRatio = 0.6f;
 
+    private bool isFirstTime = true;
+
     private WaitForSeconds shootDurationWaitTimer;
     private WaitForSeconds shootDelayWaitTimer;
     private WaitForEndOfFrame eofWaitTimer;
@@ -55,6 +57,8 @@ public class LaserController : MonoBehaviour
         shootDelayWaitTimer = new WaitForSeconds(shootingDelay);
         eofWaitTimer = new WaitForEndOfFrame();
         identityRotation = Quaternion.identity;
+
+        isFirstTime = true;
     }
 
     [ContextMenu("Shoot coroutine")]
@@ -135,7 +139,11 @@ public class LaserController : MonoBehaviour
 
     private IEnumerator AnimateLaser(float distance, bool isHit)
     {
-        yield return shootDelayWaitTimer;
+        if (isFirstTime)
+        {
+            yield return shootDelayWaitTimer;
+            isFirstTime = false;
+        }
 
         laserStartObject.SetActive(true);
         laserMiddleObject.SetActive(true);

@@ -11,15 +11,15 @@ public class TriggerUtility : MonoBehaviour
     public string targetTag = "Player";
 
     [Tooltip("Trigger automatically when the game starts")]
-    public bool triggerOnAwake = false;
+    public bool triggerOnStart = false;
 
     [Header("Events")]
     [Tooltip("The event(s) to be triggered on colliding with the specified tảgeet")]
     public UnityEvent triggerEvent;
 
-    private void Awake()
+    private void Start()
     {
-        if (triggerOnAwake)
+        if (triggerOnStart)
         {
             triggerEvent.Invoke();
         }
