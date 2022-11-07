@@ -111,6 +111,8 @@ public class AutoFillTileUtility : MonoBehaviour
 
         bool isVertical = (fillDirection == Direction.Up || fillDirection == Direction.Down);
 
+        yield return cycleWaitTimer;
+
         do
         {
             // Fill

@@ -49,6 +49,18 @@ public class CameraController : MonoBehaviour
     [Tooltip("The input manager used to collect input information")]
     public InputManager inputManager;
 
+    [Header("Alternative Settings")]
+    [Tooltip("The alternative camera's view's size")]
+    public float alternativeCameraSize = 2.0f;
+
+    public float convertRate = 4.0f;
+
+    private bool isConvertingForth = false;     // from original to alternative
+
+    private bool isConvertingBack = false;      // from alternative back to original
+
+    private float originalCameraSize;
+
     /// <summary>
     /// Description:
     /// Standard Unity function called once before the first update
@@ -73,6 +85,7 @@ public class CameraController : MonoBehaviour
     void InitilalSetup()
     {
         playerCamera = GetComponent<Camera>();
+        originalCameraSize = playerCamera.orthographicSize;
         SetUpInputManager();
     }
 
@@ -87,6 +100,11 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         SetCameraPosition();
+
+        if (isConvertingForth || isConvertingBack)
+        {
+            UpdateCameraSize();
+        }
     }
 
     /// <summary>
@@ -200,5 +218,39 @@ public class CameraController : MonoBehaviour
         }
         result.z = cameraZCoordinate;
         return result;
+    }
+
+    public void SwitchToAlternativeSize()
+    {
+        //playerCamera.orthographicSize = alternativeCameraSize;
+        isConvertingForth = true;
+    }
+
+    public void SwitchToMainSize()
+    {
+        //playerCamera.orthographicSize = originalCameraSize;
+        isConvertingBack = true;
+    }
+
+    private void UpdateCameraSize()
+    {
+        float target = playerCamera.orthographicSize;
+        if (isConvertingForth)
+        {
+            target = alternativeCameraSize;
+        }
+        else if (isConvertingBack)
+        {
+            target = originalCameraSize;
+        }
+
+        playerCamera.orthographicSize = Mathf.MoveTowards(playerCamera.orthographicSize, target, convertRate * Time.deltaTime);
+
+        if (Mathf.Abs(playerCamera.orthographicSize - target) < convertRate * Time.deltaTime)
+        {
+            // finish
+            isConvertingBack = isConvertingForth = false;
+            playerCamera.orthographicSize = target;
+        }
     }
 }
