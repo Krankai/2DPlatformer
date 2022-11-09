@@ -421,6 +421,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1188783643616752073, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_Text
+      value: 'MSU GEL LAB, 2020
+
+
+        Thinh Do, 2022'
+      objectReference: {fileID: 0}
     - target: {fileID: 1754291018770689500, guid: c45041f43743ded48bcedcf90819a218, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -445,6 +452,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2191613302963352638, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2191613302963352638, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 263.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2191613302963352638, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2191613302963352638, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -72
+      objectReference: {fileID: 0}
     - target: {fileID: 4701486191492497490, guid: c45041f43743ded48bcedcf90819a218, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -467,6 +490,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4701486191492497490, guid: c45041f43743ded48bcedcf90819a218, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701486191549272232, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4701486191786629153, guid: c45041f43743ded48bcedcf90819a218, type: 3}
@@ -561,6 +588,10 @@ PrefabInstance:
       propertyPath: inputManager
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4701486191848773410, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4701486192163451341, guid: c45041f43743ded48bcedcf90819a218, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -582,6 +613,58 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4701486192163451341, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701486192447990303, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701486192447990303, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701486192447990303, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 160
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701486192447990303, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701486192447990303, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 166.59961
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701486192447990303, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -35.681564
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701486192663233025, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701486193041080845, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701486193041080845, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701486193041080845, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701486193041080845, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701486193041080845, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701486193041080845, guid: c45041f43743ded48bcedcf90819a218, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -633,6 +716,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4701486193156877805, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4701486193159511416, guid: c45041f43743ded48bcedcf90819a218, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -655,6 +742,41 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4701486193159511416, guid: c45041f43743ded48bcedcf90819a218, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5636172869772603361, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_Text
+      value: 'Use WASD to control your character.
+
+
+        Avoid acid pool and enemies
+        (or fight them instead).
+
+
+        Collect gems and other items to recover
+        and unlock door.
+
+
+        Find your ways and get the asteroid to pass the
+        stage.
+
+
+        Good luck!'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5636172869772603361, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5636172869772603361, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 5636172869772603361, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5636172869772603361, guid: c45041f43743ded48bcedcf90819a218, type: 3}
+      propertyPath: m_FontData.m_AlignByGeometry
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5700617570501496030, guid: c45041f43743ded48bcedcf90819a218, type: 3}

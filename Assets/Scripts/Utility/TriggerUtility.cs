@@ -17,19 +17,23 @@ public class TriggerUtility : MonoBehaviour
     [Tooltip("The event(s) to be triggered on colliding with the specified tảgeet")]
     public UnityEvent triggerEvent;
 
+    public bool IsTriggered { get; private set; }
+
     private void Start()
     {
-        if (triggerOnStart)
+        if (triggerOnStart && !IsTriggered)
         {
             triggerEvent.Invoke();
+            IsTriggered = true;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag(targetTag))
+        if (collision.CompareTag(targetTag) && !IsTriggered)
         {
             triggerEvent.Invoke();
+            IsTriggered = true;
         }
     }
 }
